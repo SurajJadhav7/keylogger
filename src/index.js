@@ -60,11 +60,15 @@ app.whenReady().then(() => {
         });
         
         uIOhook.start();
-        createWindow();
       }
     });
   } else if (process.platform === 'win32') {
-    // Todo
+    const { uIOhook } = require('uiohook-napi');
+    uIOhook.on('keydown', (e) => {
+      console.log('key pressed...', e)
+    });
+    
+    uIOhook.start();
   } else if (process.platform === 'linux') {
     const { uIOhook } = require('uiohook-napi');
     uIOhook.on('keydown', (e) => {
@@ -72,8 +76,8 @@ app.whenReady().then(() => {
     });
     
     uIOhook.start();
-    createWindow();
   }
+  createWindow();
 });
 
 app.on('window-all-closed', () => {
