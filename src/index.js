@@ -51,17 +51,29 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
-  checkAccessibilityPermissions((isTrusted) => {
-    if (isTrusted) {
-      const { uIOhook } = require('uiohook-napi');
-      uIOhook.on('keydown', (e) => {
-        console.log('key pressed...', e)
-      });
-      
-      uIOhook.start();
-      createWindow();
-    }
-  });
+  if (process.platform === 'darwin') {
+    checkAccessibilityPermissions((isTrusted) => {
+      if (isTrusted) {
+        const { uIOhook } = require('uiohook-napi');
+        uIOhook.on('keydown', (e) => {
+          console.log('key pressed...', e)
+        });
+        
+        uIOhook.start();
+        createWindow();
+      }
+    });
+  } else if (process.platform === 'win32') {
+    // Todo
+  } else if (process.platform === 'linux') {
+    const { uIOhook } = require('uiohook-napi');
+    uIOhook.on('keydown', (e) => {
+      console.log('key pressed...', e)
+    });
+    
+    uIOhook.start();
+    createWindow();
+  }
 });
 
 app.on('window-all-closed', () => {
